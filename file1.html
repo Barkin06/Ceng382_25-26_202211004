@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Uchiha Clan Login</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background: url('madaraa.png') center center no-repeat;
+            background-size: cover;
+            flex-direction: column;
+            position: relative;
+        }
+
+        .sharingan {
+            background: #e41414;
+            width: 10em;
+            height: 10em;
+            border-radius: 50%; /*it makes it circle*/
+            border: 4px #000 solid; /*solid makes the out black circle*/
+            animation: spin 2s linear infinite; /*linear infinite makes it spin unlimited, I asked to gpt with the keyframe part*/
+            cursor: pointer;
+        }
+
+        .inner_ring {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%); /*it puts it to middle*/
+            width: 5em;
+            height: 5em;
+            border-radius: 50%;
+            border: 3px rgba(110, 13, 13, 0.8) solid;
+        }
+
+        .tomoe {
+            position: absolute;
+            width: 1.2em;
+            height: 1.2em;
+            background: black;
+            border-radius: 50%;
+        }
+        
+       
+        .tomoe:nth-child(2) {
+            top: 68%;
+            left: 75%;
+            transform: translate(-60%, -60%) rotate(120deg);
+        }
+
+        .tomoe:nth-child(3) {
+            top: 68%;
+            left: 25%;
+            transform: translate(-50%, -50%) rotate(-120deg);
+        }
+
+        .tomoe:nth-child(4) {
+            top: 22%;
+            left: 45%;
+            transform: translate(-50%, -50%) rotate(0deg);
+        }
+
+
+        .center-circle {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 1.5em;
+            height: 1.5em;
+            background: black;
+            border-radius: 50%;
+        }
+        /*THIS PART OF CODE IS FROM CHATGPT*/
+        /*I asked chatgpt, can you add my sharingan button a spin animation?*/
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        #login-container {
+            display: none; /*login screen invisible*/
+            flex-direction: column; /*makes them ordered on column*/
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            background: rgba(0, 0, 0, 0.7);
+            color: white;
+            width: 100%;
+            position: absolute;
+        }
+
+        input {
+            margin: 10px;
+            padding: 10px; /*left right blanks*/
+            border: none;
+            border-radius: 5px;
+            width: 200px;
+            height: 40px;
+            background: white;
+            color: black;
+        }
+
+        .top {
+            width: 150px;
+            height: 75px;
+            background: red;
+            border-top-left-radius: 100px;
+            border-top-right-radius: 100px;
+        }
+
+        .middle {
+            width: 150px;
+            height: 20px;
+            background: black;
+        }
+
+        .bottom {
+            width: 150px;
+            height: 75px;
+            background: white;
+            border-bottom-left-radius: 100px;
+            border-bottom-right-radius: 100px;
+        }
+
+        .stick {
+            width: 20px;
+            height: 50px;
+            background: white;
+            position: relative;
+            left: 65px;
+        }
+
+        .button {
+            background: none;
+            border: none;
+            cursor: pointer;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+    </style>
+</head>
+
+
+
+<body>
+    <div class="sharingan" id="sharinganButton">
+        <div class="inner_ring"></div>
+        <div class="tomoe"></div>
+        <div class="tomoe"></div>
+        <div class="tomoe"></div>
+        <div class="center-circle"></div>
+    </div>
+
+    <div id="login-container">
+        <h2>Login</h2>
+        <input type="text" id="username" placeholder="Username">
+        <input type="password" id="password" placeholder="Password">
+        <button class="button" onclick="login()">
+            <div class="fan">
+                <div class="top"></div>
+                <div class="middle"></div>
+                <div class="bottom"></div>
+                <div class="stick"></div>
+            </div>
+        </button>
+    </div>
+
+    <!--THIS PART OF CODE IS FROM CHATGPT-->
+    <!--I asked, Can you add a function to first and second button in the code that I will give to you? And also a small login func.-->
+
+    <script>
+        document.getElementById("sharinganButton").addEventListener("click", function() {
+            document.body.style.background = "url('madara.gif') center center no-repeat";
+            document.body.style.backgroundSize = "cover";
+            document.getElementById("sharinganButton").style.display = "none";
+            document.getElementById("login-container").style.display = "flex";
+        });
+
+        function login() {
+            var username = document.getElementById("username").value;
+            var password = document.getElementById("password").value;
+            
+            if (username === "uchiha" && password === "madara") {
+                alert("Welcome, Uchiha!");
+            } else {
+                alert("Wrong password or username! Try again.");
+            }
+        }
+    </script>
+
+
+
+<style>
+    @keyframes shake {
+        0% { transform: translateX(0); }
+        25% { transform: translateX(-5px); }
+        50% { transform: translateX(5px); }
+        75% { transform: translateX(-5px); }
+        100% { transform: translateX(0); }
+    }
+
+    .shake {
+        animation: shake 0.3s ease-in-out;
+    }
+</style>
+ <!--THIS PART OF CODE IS FROM CHATGPT-->
+<!--I asked ChatGPT can you add a shake animation to the button, when entrance is wrong?-->
+<script>
+    function login() {
+        var username = document.getElementById("username").value;
+        var password = document.getElementById("password").value;
+        var button = document.querySelector(".button");
+
+        if (username === "uchiha" && password === "madara") {
+            alert("Welcome, Uchiha!");
+        } else {
+            alert("Wrong password or username! Try again.");
+            button.classList.add("shake");
+
+            setTimeout(function() {
+                button.classList.remove("shake");
+            }, 300);
+        }
+    }
+</script>
+
+</body>
+</html>
