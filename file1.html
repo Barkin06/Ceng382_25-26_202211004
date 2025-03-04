@@ -1,8 +1,11 @@
+<!--SALIH BARKIN AKKAYA 202211004-->
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <title>Uchiha Clan Login</title>
+    <link href="https://fonts.googleapis.com/css?family=Redressed|Poppins:400,700" rel="stylesheet">
+    <!--I watched a few tutorials to make sharingan look better so I used "Redressed" font-->
     <style>
         * {
             margin: 0;
@@ -21,93 +24,76 @@
             position: relative;
         }
 
-        .sharingan {
-            background: #e41414;
-            width: 10em;
-            height: 10em;
-            border-radius: 50%; /*it makes it circle*/
-            border: 4px #000 solid; /*solid makes the out black circle*/
-            animation: spin 2s linear infinite; /*linear infinite makes it spin unlimited, I asked to gpt with the keyframe part*/
+        .eye {
+            position: relative;
+            background-color: #d20c0c;
+            border: 5px solid #000000;
+            border-radius: 50%;
+            height: 100px;
+            width: 100px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
             cursor: pointer;
         }
 
-        .inner_ring {
+        .sharingan {
             position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%); /*it puts it to middle*/
-            width: 5em;
-            height: 5em;
-            border-radius: 50%;
-            border: 3px rgba(110, 13, 13, 0.8) solid;
+            animation: loader 2s infinite linear;
         }
 
-        .tomoe {
-            position: absolute;
-            width: 1.2em;
-            height: 1.2em;
-            background: black;
-            border-radius: 50%;
-        }
-        
-       
-        .tomoe:nth-child(2) {
-            top: 68%;
-            left: 75%;
-            transform: translate(-60%, -60%) rotate(120deg);
+        #pupil {
+            fill: black;
         }
 
-        .tomoe:nth-child(3) {
-            top: 68%;
-            left: 25%;
-            transform: translate(-50%, -50%) rotate(-120deg);
+        #iris {
+            stroke-width: 8px;
+            stroke: rgba(182, 20, 20, 0.75);
+            fill: rgba(136, 20, 20, 0.9);
         }
 
-        .tomoe:nth-child(4) {
-            top: 22%;
-            left: 45%;
-            transform: translate(-50%, -50%) rotate(0deg);
+        .iris_anomaly {
+            fill: black;
+            font-size: 110px;
+            font-family: "Redressed", cursive;
         }
 
-
-        .center-circle {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            width: 1.5em;
-            height: 1.5em;
-            background: black;
-            border-radius: 50%;
+        @keyframes loader {
+            0% {
+                transform: rotate(0deg);
+            }
+            100% {
+                transform: rotate(360deg);
+            }
         }
-        /*THIS PART OF CODE IS FROM CHATGPT*/
-        /*I asked chatgpt, can you add my sharingan button a spin animation?*/
-        @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
-        }
-
+        /*I asked this part to chatgpt to create an animation and logo(logo was not rigth so I arranged the values)*/
+        /*GPT, can you provide me the logo that I sent to you in css and html*/
         #login-container {
-            display: none; /*login screen invisible*/
-            flex-direction: column; /*makes them ordered on column*/
+            display: none;
+            flex-direction: column;
             align-items: center;
             justify-content: center;
             height: 100vh;
-            background: rgba(0, 0, 0, 0.7);
+            background: rgba(0, 0, 0, 0.85);
             color: white;
             width: 100%;
             position: absolute;
+            border-radius: 15px;
+            box-shadow: 0 0 20px rgba(255, 0, 0, 0.8);
         }
 
         input {
             margin: 10px;
-            padding: 10px; /*left right blanks*/
+            padding: 12px;
             border: none;
             border-radius: 5px;
-            width: 200px;
+            width: 220px;
             height: 40px;
             background: white;
             color: black;
+            font-size: 16px;
+            text-align: center;
+            font-family: "Poppins", sans-serif; /*Also you asked a different font, so I changed it*/
         }
 
         .top {
@@ -147,26 +133,47 @@
             display: flex;
             justify-content: center;
             align-items: center;
+            margin-top: 20px;
+        }
+
+        @keyframes shake {
+            0% { transform: translateX(0); }
+            25% { transform: translateX(-5px); }
+            50% { transform: translateX(5px); }
+            75% { transform: translateX(-5px); }
+            100% { transform: translateX(0); }
+        }
+
+        .shake {
+            animation: shake 0.5s ease-in-out;
         }
     </style>
 </head>
 
-
+<!--This part of code, is taken from chatgpt but it couldnt arrange the values so I arranged them-->
+<!--GPT, can you create the html part of the code that remained? But dont touch the values, write them all zero, I will try-->
 
 <body>
-    <div class="sharingan" id="sharinganButton">
-        <div class="inner_ring"></div>
-        <div class="tomoe"></div>
-        <div class="tomoe"></div>
-        <div class="tomoe"></div>
-        <div class="center-circle"></div>
+    <div class="eye" id="sharinganButton">
+        <svg class="sharingan" viewBox="0 0 100 100" width="100" height="100">
+            <g id="full_pupil">
+                <circle id="iris" r="30" cx="50" cy="50"></circle>
+                <circle id="pupil" r="10" cx="50" cy="50"></circle>
+                
+                <text id="iris_anomaly" class="iris_anomaly" transform="rotate(180 30,8)">,</text>
+                <use href="#iris_anomaly" transform="rotate(120 50,50)" fill="black"></use>
+                <use href="#iris_anomaly" transform="rotate(240 50,50)" fill="black"></use>
+            </g>
+        </svg>
     </div>
+
+
 
     <div id="login-container">
         <h2>Login</h2>
         <input type="text" id="username" placeholder="Username">
         <input type="password" id="password" placeholder="Password">
-        <button class="button" onclick="login()">
+        <button class="button" onclick="login()" id="loginButton">
             <div class="fan">
                 <div class="top"></div>
                 <div class="middle"></div>
@@ -175,9 +182,8 @@
             </div>
         </button>
     </div>
-
-    <!--THIS PART OF CODE IS FROM CHATGPT-->
-    <!--I asked, Can you add a function to first and second button in the code that I will give to you? And also a small login func.-->
+<!--I asked this part to GPT-->
+<!--Gpt, can you please give me a basic login screen functionality and shaking for my button if the entrance is wrong?-->
 
     <script>
         document.getElementById("sharinganButton").addEventListener("click", function() {
@@ -190,50 +196,15 @@
         function login() {
             var username = document.getElementById("username").value;
             var password = document.getElementById("password").value;
+            var button = document.getElementById("loginButton");
             
             if (username === "uchiha" && password === "madara") {
                 alert("Welcome, Uchiha!");
             } else {
-                alert("Wrong password or username! Try again.");
+                button.classList.add("shake");
+                setTimeout(() => button.classList.remove("shake"), 300);
             }
         }
     </script>
-
-
-
-<style>
-    @keyframes shake {
-        0% { transform: translateX(0); }
-        25% { transform: translateX(-5px); }
-        50% { transform: translateX(5px); }
-        75% { transform: translateX(-5px); }
-        100% { transform: translateX(0); }
-    }
-
-    .shake {
-        animation: shake 0.3s ease-in-out;
-    }
-</style>
- <!--THIS PART OF CODE IS FROM CHATGPT-->
-<!--I asked ChatGPT can you add a shake animation to the button, when entrance is wrong?-->
-<script>
-    function login() {
-        var username = document.getElementById("username").value;
-        var password = document.getElementById("password").value;
-        var button = document.querySelector(".button");
-
-        if (username === "uchiha" && password === "madara") {
-            alert("Welcome, Uchiha!");
-        } else {
-            alert("Wrong password or username! Try again.");
-            button.classList.add("shake");
-
-            setTimeout(function() {
-                button.classList.remove("shake");
-            }, 300);
-        }
-    }
-</script>
-
 </body>
 </html>
