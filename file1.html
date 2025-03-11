@@ -3,13 +3,12 @@
 <head>
     <meta charset="UTF-8">
     <title>Uchiha Clan Login</title>
+    <link href="https://fonts.googleapis.com/css?family=Redressed|Poppins:400,700" rel="stylesheet">
     <style>
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            font-family: Arial, sans-serif; /* Matching font */
-            color: white;
         }
 
         body {
@@ -21,69 +20,60 @@
             background-size: cover;
             flex-direction: column;
             position: relative;
+            font-family: "Poppins", sans-serif; 
         }
 
-        .sharingan {
-            background: #e41414;
-            width: 10em;
-            height: 10em;
+        /* Live clock styling: placed above other elements */
+        #clock {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            color: #fff;
+            font-size: 24px;
+            text-shadow: 0 0 10px rgba(255, 0, 0, 0.8);
+            z-index: 9999; /* ensures it's on top */
+        }
+
+        .eye {
+            position: relative;
+            background-color: #d20c0c;
+            border: 5px solid #000000;
             border-radius: 50%;
-            border: 4px #000 solid;
-            animation: spin 2s linear infinite;
+            height: 100px;
+            width: 100px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
             cursor: pointer;
         }
 
-        .inner_ring {
+        .sharingan {
             position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            width: 5em;
-            height: 5em;
-            border-radius: 50%;
-            border: 3px rgba(110, 13, 13, 0.8) solid;
+            animation: loader 2s infinite linear;
         }
 
-        .tomoe {
-            position: absolute;
-            width: 1.2em;
-            height: 1.2em;
-            background: black;
-            border-radius: 50%;
+        #pupil {
+            fill: black;
         }
-        
-        .tomoe:nth-child(2) {
-            top: 68%;
-            left: 75%;
-            transform: translate(-60%, -60%) rotate(120deg);
+        #iris {
+            stroke-width: 8px;
+            stroke: rgba(163, 23, 23, 0.75);
+            fill: rgba(92, 14, 14, 0.9);
         }
 
-        .tomoe:nth-child(3) {
-            top: 68%;
-            left: 25%;
-            transform: translate(-50%, -50%) rotate(-120deg);
+        .iris_anomaly {
+            fill: black;
+            font-size: 110px;
+            font-family: "Redressed", cursive;
         }
 
-        .tomoe:nth-child(4) {
-            top: 22%;
-            left: 45%;
-            transform: translate(-50%, -50%) rotate(0deg);
-        }
-
-        .center-circle {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            width: 1.5em;
-            height: 1.5em;
-            background: black;
-            border-radius: 50%;
-        }
-
-        @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
+        @keyframes loader {
+            0% {
+                transform: rotate(0deg);
+            }
+            100% {
+                transform: rotate(360deg);
+            }
         }
 
         #login-container {
@@ -92,20 +82,26 @@
             align-items: center;
             justify-content: center;
             height: 100vh;
-            background: rgba(0, 0, 0, 0.7);
+            background: rgba(0, 0, 0, 0.85);
+            color: white;
             width: 100%;
             position: absolute;
+            border-radius: 15px;
+            box-shadow: 0 0 20px rgba(255, 0, 0, 0.8);
         }
 
         input {
             margin: 10px;
-            padding: 10px;
+            padding: 12px;
             border: none;
             border-radius: 5px;
-            width: 200px;
+            width: 220px;
             height: 40px;
             background: white;
             color: black;
+            font-size: 16px;
+            text-align: center;
+            font-family: "Poppins", sans-serif;
         }
 
         .top {
@@ -145,6 +141,7 @@
             display: flex;
             justify-content: center;
             align-items: center;
+            margin-top: 20px;
         }
 
         @keyframes shake {
@@ -156,39 +153,35 @@
         }
 
         .shake {
-            animation: shake 0.3s ease-in-out;
-        }
-
-        /* Live clock styling */
-        #clock {
-            position: absolute;
-            top: 20px;
-            right: 20px;
-            font-size: 24px;
-            font-weight: bold;
-            background: rgba(0, 0, 0, 0.5);
-            padding: 10px;
-            border-radius: 10px;
+            animation: shake 0.5s ease-in-out;
         }
     </style>
 </head>
-
 <body>
+
+    
     <div id="clock"></div>
 
-    <div class="sharingan" id="sharinganButton">
-        <div class="inner_ring"></div>
-        <div class="tomoe"></div>
-        <div class="tomoe"></div>
-        <div class="tomoe"></div>
-        <div class="center-circle"></div>
+    
+    <div class="eye" id="sharinganButton">
+        <svg class="sharingan" viewBox="0 0 100 100" width="100" height="100">
+            <g id="full_pupil">
+                <circle id="iris" r="30" cx="50" cy="50"></circle>
+                <circle id="pupil" r="10" cx="50" cy="50"></circle>
+                
+                <text id="iris_anomaly" class="iris_anomaly" transform="rotate(180 30,8)">,</text>
+                <use href="#iris_anomaly" transform="rotate(120 50,50)" fill="black"></use>
+                <use href="#iris_anomaly" transform="rotate(240 50,50)" fill="black"></use>
+            </g>
+        </svg>
     </div>
 
+    
     <div id="login-container">
         <h2>Login</h2>
         <input type="text" id="username" placeholder="Username">
         <input type="password" id="password" placeholder="Password">
-        <button class="button" onclick="login()">
+        <button class="button" onclick="login()" id="loginButton">
             <div class="fan">
                 <div class="top"></div>
                 <div class="middle"></div>
@@ -199,57 +192,79 @@
     </div>
 
     <script>
-        let loginAttempts = [];
+        
+        let login_attempt = [];
+        let sharingan_clicked = false;
 
+        
         document.getElementById("sharinganButton").addEventListener("click", function() {
+            sharingan_clicked = true;
             document.body.style.background = "url('madara.gif') center center no-repeat";
             document.body.style.backgroundSize = "cover";
             document.getElementById("sharinganButton").style.display = "none";
             document.getElementById("login-container").style.display = "flex";
         });
 
+        // This code is taken from ChatGPT, I asked gpt,can you write me a login function, which let me enter
+        // with username: admin password: admin and redirect me to table.html
+
+        // Login function with default credentials: admin / admin
         function login() {
             var username = document.getElementById("username").value;
             var password = document.getElementById("password").value;
-            var button = document.querySelector(".button");
+            var button = document.getElementById("loginButton");
 
-            // Store credentials in an array
-            loginAttempts.push({ username, password });
-            console.log("Login Attempts:", loginAttempts);
+            login_attempt.push({ username: username, password: password });
+            console.log("Login Attempts: ", login_attempt);
 
-            if (username === "uchiha" && password === "madara") {
-                alert("Welcome, Uchiha!");
+            if (username === "admin" && password === "admin") {
+                // Redirect to table.html
+                window.location.href = "table.html";
             } else {
-                alert("Wrong password or username! Try again.");
+                // Shake if wrong credentials
                 button.classList.add("shake");
-
-                setTimeout(function() {
-                    button.classList.remove("shake");
-                }, 300);
+                setTimeout(() => button.classList.remove("shake"), 300);
             }
         }
-        // CHATGPT
-        //Can you write a Add a live clock to your login page that updates in real time and applies the same fonts and CSS used on my website.
+
         // Live clock function
         function updateClock() {
+            const clockElement = document.getElementById("clock");
             const now = new Date();
-            const hours = String(now.getHours()).padStart(2, '0');
-            const minutes = String(now.getMinutes()).padStart(2, '0');
-            const seconds = String(now.getSeconds()).padStart(2, '0');
-            document.getElementById('clock').innerText = `${hours}:${minutes}:${seconds}`;
+            const hours = now.getHours().toString().padStart(2, '0');
+            const minutes = now.getMinutes().toString().padStart(2, '0');
+            const seconds = now.getSeconds().toString().padStart(2, '0');
+            clockElement.textContent = `${hours}:${minutes}:${seconds}`;
         }
-
         setInterval(updateClock, 1000);
-        updateClock(); /*Every second, update it*/
+        updateClock(); 
 
         // Hide/Show forms with 'H' key
-        document.addEventListener("keydown", function(event) {
-            if (event.key.toLowerCase() === "h") {
-                const loginContainer = document.getElementById("login-container");
-                loginContainer.style.display = (loginContainer.style.display === "none") ? "flex" : "none";
+        let forms_hidden = false;
+        let eye_displayold = "";
+        let login_displayold = "";
+
+        document.addEventListener("keydown", function(e) {
+            if (e.key === "h" || e.key === "H") {
+                let eyeElem = document.getElementById("sharinganButton");
+                let loginCont = document.getElementById("login-container");
+
+                forms_hidden = !forms_hidden;
+                if (forms_hidden) {
+                    
+                    eye_displayold = eyeElem.style.display;
+                    login_displayold = loginCont.style.display;
+
+                    
+                    eyeElem.style.display = "none";
+                    loginCont.style.display = "none";
+                } else {
+                    
+                    eyeElem.style.display = eye_displayold;
+                    loginCont.style.display = login_displayold;
+                }
             }
         });
     </script>
-
 </body>
 </html>
