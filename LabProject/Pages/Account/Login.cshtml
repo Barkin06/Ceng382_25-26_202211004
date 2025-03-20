@@ -1,0 +1,39 @@
+@page
+@model LabProject.Pages.IndexModel
+@{
+    Layout = "_Layout";  
+    ViewData["Title"] = "Register";
+}
+
+<form method="post">
+    <h3>New Account?</h3>
+    
+    <div class="form-holder">
+        <span class="lnr lnr-user"></span>
+        <input asp-for="Username" type="text" class="form-control" placeholder="Username">
+    </div>
+    
+    <div class="form-holder">
+        <span class="lnr lnr-phone-handset"></span>
+        <input asp-for="PhoneNumber" type="text" class="form-control" placeholder="Phone Number">
+    </div>
+    
+    <div class="form-holder">
+        <span class="lnr lnr-envelope"></span>
+        <input asp-for="Email" type="text" class="form-control" placeholder="Mail">
+    </div>
+    
+    <div class="form-holder">
+        <span class="lnr lnr-lock"></span>
+        <input asp-for="Password" type="password" class="form-control" placeholder="Password">
+    </div>
+    
+    <div class="form-holder">
+        <span class="lnr lnr-lock"></span>
+        <input asp-for="ConfirmPassword" type="password" class="form-control" placeholder="Confirm Password">
+    </div>
+    
+    <button type="submit">
+        <span>Register</span>
+    </button>
+</form>
