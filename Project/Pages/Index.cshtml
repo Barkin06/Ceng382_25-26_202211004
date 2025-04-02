@@ -5,75 +5,68 @@
     var isEditing = Model.EditId.HasValue;
 }
 
-<!-- GPT : Can you create a trash bin icon and a pencil icon form me as a button template? -->
-<!-- Bootstrap + Font Awesome -->
+<!-- Example CSS / Bootstrap -->
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
 
-
-<!-- GPT : Can you create a colorful background which is around red/pink tones? -->
 <style>
     body {
-        background-color: #f5c9c9; /* Soft pink background */
+        background-color: #f5c9c9;
     }
-
     .container {
-        background-color: #ffffff; /* White background for the content area */
+        background-color: #ffffff;
         padding: 20px;
         border-radius: 10px;
     }
-
-    /* Style for form fields */
     .form-control {
-        background-color: #fff3f3; /* Light pink background for input fields */
-        border-color: #f08080; /* Soft red border */
-        color: #333; /* Dark text color for readability */
+        background-color: #fff3f3;
+        border-color: #f08080;
+        color: #333;
     }
-
     .form-control:focus {
-        background-color: #ffcccc; /* Lighter pink background on focus */
-        border-color: #ff4d4d; /* Red border on focus */
-        box-shadow: 0 0 5px rgba(255, 77, 77, 0.5); /* Focus shadow effect */
+        background-color: #ffcccc;
+        border-color: #ff4d4d;
+        box-shadow: 0 0 5px rgba(255, 77, 77, 0.5);
     }
-
-    /* Style for buttons */
     .btn-primary {
-        background-color: #ff4d4d; /* Red background for primary button */
-        border-color: #e03e3e; /* Darker red border */
+        background-color: #ff4d4d;
+        border-color: #e03e3e;
     }
-
     .btn-primary:hover {
-        background-color: #e03e3e; /* Darker red on hover */
-        border-color: #c53737; /* Even darker border on hover */
+        background-color: #e03e3e;
+        border-color: #c53737;
     }
-
     .btn-secondary {
-        background-color: #f5a3a3; /* Lighter red for secondary button */
+        background-color: #f5a3a3;
         border-color: #e08282;
     }
-
     .btn-secondary:hover {
-        background-color: #e08282; /* Hover effect */
+        background-color: #e08282;
         border-color: #d37373;
     }
-
-    /* Style for error messages */
     .text-danger {
-        color: #e03e3e; /* Dark red for validation errors */
+        color: #e03e3e;
     }
 </style>
-
 
 <div class="container mt-5 mb-5">
     <div class="row justify-content-center gap-4">
 
-        <!-- Sol: Form -->
+        <!-- Left Column: Form -->
         <div class="col-md-5 border rounded shadow-sm p-4 bg-white">
             <h4 class="text-center mb-4">@(isEditing ? "Edit Class" : "Add Class")</h4>
+
+            <!-- Post to OnPostEdit or OnPostAdd -->
             <form method="post" asp-page-handler="@(isEditing ? "Edit" : "Add")">
+
+                @* If we are editing, carry the EditId forward in a hidden field *@
                 @if (isEditing)
                 {
                     <input type="hidden" asp-for="EditId" />
                 }
+
+                @* Keep filter so we don't lose it on post *@
+                <input type="hidden" asp-for="FilterClassName" />
+
 
                 <div class="mb-3">
                     <label asp-for="NewClass.ClassName" class="form-label"></label>
@@ -83,7 +76,7 @@
 
                 <div class="mb-3">
                     <label asp-for="NewClass.StudentCount" class="form-label"></label>
-                    <input asp-for="NewClass.StudentCount" class="form-control" />
+                    <input asp-for="NewClass.StudentCount" class="form-control" type="number" />
                     <span asp-validation-for="NewClass.StudentCount" class="text-danger"></span>
                 </div>
 
@@ -108,13 +101,25 @@
             </form>
         </div>
 
-        <!-- Sağ: Tablo -->
+        <!-- Right Column: Filter + Table + Pagination -->
         <div class="col-md-6 border rounded shadow-sm p-4 bg-white">
             <h4 class="text-center mb-4">Class List</h4>
+
+            <!-- Filtering -->
+            <form method="get" class="mb-3">
+                <div class="input-group">
+                    <input type="text" name="FilterClassName" 
+                           value="@Model.FilterClassName" 
+                           class="form-control" 
+                           placeholder="Filter by Class Name" />
+                    <button type="submit" class="btn btn-primary">Filter</button>
+                </div>
+            </form>
+
+            <!-- Table -->
             <table class="table table-bordered table-hover align-middle text-center">
                 <thead class="table-light">
                     <tr>
-                        <th>ID</th>
                         <th>Class Name</th>
                         <th>Student Count</th>
                         <th>Description</th>
@@ -122,23 +127,30 @@
                     </tr>
                 </thead>
                 <tbody>
-                    @foreach (var item in IndexModel.ClassList)
+                    @foreach (var item in Model.FilteredList)
                     {
                         <tr>
-                            <td>@item.Id</td>
                             <td>@item.ClassName</td>
                             <td>@item.StudentCount</td>
                             <td>@item.Description</td>
                             <td>
-                                <!-- Edit button with icon -->
-                                <a class="btn btn-sm btn-warning" asp-page="/Index" asp-route-editId="@item.Id" title="Edit">
+                                <!-- EDIT BUTTON -->
+                                <a class="btn btn-sm btn-warning" 
+                                   asp-page="/Index" 
+                                   asp-route-editId="@item.HiddenId" 
+                                   asp-route-filterClassName="@Model.FilterClassName"
+                                   asp-route-pageNumber="@Model.PageNumber">
                                     <i class="fas fa-pen me-1"></i> Edit
                                 </a>
 
-                                <!-- Delete button with icon -->
-                                <form method="post" asp-page-handler="Delete" style="display:inline;">
-                                    <input type="hidden" name="id" value="@item.Id" />
-                                    <button type="submit" class="btn btn-sm btn-danger ms-1" title="Delete">
+                                <!-- DELETE FORM -->
+                                <form method="post" 
+                                      asp-page-handler="Delete" 
+                                      style="display:inline;">
+                                    <input type="hidden" name="id" value="@item.HiddenId" />
+                                    <input type="hidden" name="FilterClassName" value="@Model.FilterClassName" />
+                                    <input type="hidden" name="PageNumber" value="@Model.PageNumber" />
+                                    <button type="submit" class="btn btn-sm btn-danger ms-1">
                                         <i class="fas fa-trash me-1"></i> Delete
                                     </button>
                                 </form>
@@ -147,6 +159,41 @@
                     }
                 </tbody>
             </table>
+
+            <!-- Pagination -->
+            <nav aria-label="Page navigation">
+                <ul class="pagination justify-content-center">
+                    @if (Model.PageNumber > 1)
+                    {
+                        <li class="page-item">
+                            <a class="page-link" 
+                               href="?PageNumber=@(Model.PageNumber - 1)&FilterClassName=@Model.FilterClassName">
+                                Previous
+                            </a>
+                        </li>
+                    }
+
+                    @for (int i = 1; i <= Model.TotalPages; i++)
+                    {
+                        <li class="page-item @(Model.PageNumber == i ? "active" : "")">
+                            <a class="page-link" 
+                               href="?PageNumber=@i&FilterClassName=@Model.FilterClassName">
+                                @i
+                            </a>
+                        </li>
+                    }
+
+                    @if (Model.PageNumber < Model.TotalPages)
+                    {
+                        <li class="page-item">
+                            <a class="page-link" 
+                               href="?PageNumber=@(Model.PageNumber + 1)&FilterClassName=@Model.FilterClassName">
+                                Next
+                            </a>
+                        </li>
+                    }
+                </ul>
+            </nav>
         </div>
     </div>
 </div>
