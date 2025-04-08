@@ -1,19 +1,11 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Week2.Models;
+using Week2.Helpers;
 using System.Collections.Generic;
 using System.Linq;
-
-//I asked gpt: add filtering and pagination features my last time code that I shared with you last week.
-//also filtering will be done on the data list in the backend.
-//The filtering logic must be written inside the OnGet methods.
-// I will create a new model class called ClassInformationTable
-// This model will store the filtered version of the main model.
-//In this model, the ID should not be shown in the table,
-// but the ID will still be used in the background for actions like edit, delete, or details. 
-//In addition to filtering, you are required to implement pagination.
-//create a synthetic data for 100 samples
-
+using System.Text;
+using System.IO;
 
 namespace Week2.Pages
 {
@@ -85,31 +77,15 @@ namespace Week2.Pages
             }
         }
 
-        public IActionResult OnPostAdd() // It has some bugs inside, for me to understand in better way, 
-                                        // help me put some print states gpt
+        public IActionResult OnPostAdd()
         {
             ModelState.Remove(nameof(FilterClassName));
-            Console.WriteLine("➡️ OnPostAdd tetiklendi");
-            Console.WriteLine($"ModelState.IsValid: {ModelState.IsValid}");
-            Console.WriteLine($"NewClass = {(NewClass == null ? "null" : NewClass.ClassName)}");
-
             if (!ModelState.IsValid)
-            {
-                Console.WriteLine("❌ ModelState geçersiz.");
-                foreach (var kv in ModelState)
-                {
-                    foreach (var err in kv.Value.Errors)
-                    {
-                        Console.WriteLine($"🚨 Hata -> {kv.Key}: {err.ErrorMessage}");
-                    }
-                }
                 return Page();
-            }
 
             NewClass.Id = ClassList.Any() ? ClassList.Max(c => c.Id) + 1 : 1;
-            Console.WriteLine($"✅ Class eklendi: {NewClass.ClassName}, ID: {NewClass.Id}");
-
             ClassList.Add(NewClass);
+
             return RedirectToPage(new { FilterClassName, PageNumber });
         }
 
@@ -133,11 +109,66 @@ namespace Week2.Pages
                 item.ClassName = NewClass.ClassName;
                 item.StudentCount = NewClass.StudentCount;
                 item.Description = NewClass.Description;
-
-                Console.WriteLine($"[EDIT] Updated class: ID={item.Id}, Name={item.ClassName}");
             }
 
             return RedirectToPage(new { FilterClassName, PageNumber });
+        }
+
+        public IActionResult OnPostExportToJson(List<string> selectedColumns, bool isFiltered)
+        {
+            var query = ClassList.AsQueryable();
+
+            if (isFiltered && !string.IsNullOrEmpty(FilterClassName))
+            {
+                query = query.Where(c => c.ClassName.ToLower().Contains(FilterClassName.ToLower()));
+            }
+
+            var dataToExport = query
+                .Select(c => new ClassInformationTable
+                {
+                    ClassName = c.ClassName,
+                    StudentCount = c.StudentCount,
+                    Description = c.Description,
+                    HiddenId = c.Id
+                }).ToList();
+
+            var json = Utils.Instance.ExportToJson(dataToExport, selectedColumns);
+
+            var fileName = $"ExportedData_{DateTime.Now:yyyyMMdd_HHmmss}.json";
+            var folderPath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "exports");
+
+            if (!Directory.Exists(folderPath))
+                Directory.CreateDirectory(folderPath);
+
+            var absoluteFilePath = Path.Combine(folderPath, fileName);
+            System.IO.File.WriteAllText(absoluteFilePath, json);
+
+            var downloadUrl = $"/exports/{fileName}";
+            return Redirect(downloadUrl);
+        }
+
+        // ✅ TÜM VERİYİ EXPORT EDER (CSV)
+        public IActionResult OnPostExportAll(string SelectedColumns)
+        {
+            var selectedIndexes = SelectedColumns?.Split(',').Select(int.Parse).ToList() ?? new List<int> { 0, 1, 2 };
+            var headerMap = new[] { "Class Name", "Student Count", "Description" };
+
+            var lines = new List<string>
+            {
+                string.Join(",", selectedIndexes.Select(i => $"\"{headerMap[i]}\""))
+            };
+
+            foreach (var item in ClassList)
+            {
+                var row = new List<string>();
+                if (selectedIndexes.Contains(0)) row.Add($"\"{item.ClassName}\"");
+                if (selectedIndexes.Contains(1)) row.Add(item.StudentCount.ToString());
+                if (selectedIndexes.Contains(2)) row.Add($"\"{item.Description}\"");
+                lines.Add(string.Join(",", row));
+            }
+
+            var csvBytes = Encoding.UTF8.GetBytes(string.Join("\n", lines));
+            return File(csvBytes, "text/csv", "exported_all_data.csv");
         }
 
         private static List<ClassInformationModel> GenerateSampleData()
@@ -147,6 +178,7 @@ namespace Week2.Pages
             {
                 list.Add(new ClassInformationModel
                 {
+                    Id = i,
                     ClassName = $"Class {i}",
                     StudentCount = 20 + (i % 30),
                     Description = $"Description for Class {i}"
