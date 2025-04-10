@@ -1,3 +1,6 @@
+//GPT: Add a filtered export choice, also it should add the JSON, into the exports folder.
+
+
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Week2.Models;
@@ -114,61 +117,60 @@ namespace Week2.Pages
             return RedirectToPage(new { FilterClassName, PageNumber });
         }
 
-        public IActionResult OnPostExportToJson(List<string> selectedColumns, bool isFiltered)
-        {
-            var query = ClassList.AsQueryable();
-
-            if (isFiltered && !string.IsNullOrEmpty(FilterClassName))
-            {
-                query = query.Where(c => c.ClassName.ToLower().Contains(FilterClassName.ToLower()));
-            }
-
-            var dataToExport = query
-                .Select(c => new ClassInformationTable
-                {
-                    ClassName = c.ClassName,
-                    StudentCount = c.StudentCount,
-                    Description = c.Description,
-                    HiddenId = c.Id
-                }).ToList();
-
-            var json = Utils.Instance.ExportToJson(dataToExport, selectedColumns);
-
-            var fileName = $"ExportedData_{DateTime.Now:yyyyMMdd_HHmmss}.json";
-            var folderPath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "exports");
-
-            if (!Directory.Exists(folderPath))
-                Directory.CreateDirectory(folderPath);
-
-            var absoluteFilePath = Path.Combine(folderPath, fileName);
-            System.IO.File.WriteAllText(absoluteFilePath, json);
-
-            var downloadUrl = $"/exports/{fileName}";
-            return Redirect(downloadUrl);
-        }
-
-        // ✅ TÜM VERİYİ EXPORT EDER (CSV)
         public IActionResult OnPostExportAll(string SelectedColumns)
         {
             var selectedIndexes = SelectedColumns?.Split(',').Select(int.Parse).ToList() ?? new List<int> { 0, 1, 2 };
-            var headerMap = new[] { "Class Name", "Student Count", "Description" };
+            var columnNames = new[] { "ClassName", "StudentCount", "Description" };
 
-            var lines = new List<string>
+            var selectedProperties = selectedIndexes.Select(i => columnNames[i]).ToList();
+
+            var exportData = ClassList.Select(c => new ClassInformationTable
             {
-                string.Join(",", selectedIndexes.Select(i => $"\"{headerMap[i]}\""))
-            };
+                ClassName = c.ClassName,
+                StudentCount = c.StudentCount,
+                Description = c.Description,
+                HiddenId = c.Id
+            }).ToList();
 
-            foreach (var item in ClassList)
+            var json = Utils.Instance.ExportToJson(exportData, selectedProperties);
+
+            var fileName = $"ExportedAll_{DateTime.Now:yyyyMMdd_HHmmss}.json";
+            var filePath = Path.Combine("wwwroot", "exports", fileName);
+
+            Directory.CreateDirectory(Path.GetDirectoryName(filePath)!);
+            System.IO.File.WriteAllText(filePath, json);
+
+            return Redirect($"/exports/{fileName}");
+        }
+
+        public IActionResult OnPostExportFiltered(string SelectedColumns, string FilterClassName)
+        {
+            var selectedIndexes = SelectedColumns?.Split(',').Select(int.Parse).ToList() ?? new List<int> { 0, 1, 2 };
+            var columnNames = new[] { "ClassName", "StudentCount", "Description" };
+            var selectedProperties = selectedIndexes.Select(i => columnNames[i]).ToList();
+
+            var query = ClassList.AsQueryable();
+
+            if (!string.IsNullOrWhiteSpace(FilterClassName))
+                query = query.Where(c => c.ClassName.ToLower().Contains(FilterClassName.ToLower()));
+
+            var filteredData = query.Select(c => new ClassInformationTable
             {
-                var row = new List<string>();
-                if (selectedIndexes.Contains(0)) row.Add($"\"{item.ClassName}\"");
-                if (selectedIndexes.Contains(1)) row.Add(item.StudentCount.ToString());
-                if (selectedIndexes.Contains(2)) row.Add($"\"{item.Description}\"");
-                lines.Add(string.Join(",", row));
-            }
+                ClassName = c.ClassName,
+                StudentCount = c.StudentCount,
+                Description = c.Description,
+                HiddenId = c.Id
+            }).ToList();
 
-            var csvBytes = Encoding.UTF8.GetBytes(string.Join("\n", lines));
-            return File(csvBytes, "text/csv", "exported_all_data.csv");
+            var json = Utils.Instance.ExportToJson(filteredData, selectedProperties);
+
+            var fileName = $"ExportedFiltered_{DateTime.Now:yyyyMMdd_HHmmss}.json";
+            var filePath = Path.Combine("wwwroot", "exports", fileName);
+
+            Directory.CreateDirectory(Path.GetDirectoryName(filePath)!);
+            System.IO.File.WriteAllText(filePath, json);
+
+            return Redirect($"/exports/{fileName}");
         }
 
         private static List<ClassInformationModel> GenerateSampleData()

@@ -1,12 +1,9 @@
-﻿
-@page
+﻿@page
 @model Week2.Pages.IndexModel
 @addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
 @{
     var isEditing = Model.EditId.HasValue;
 }
-
-
 <!-- ChatGPT, you have my provided code from last week, can you please help me to export the data to jason according to the rules:
 Add a new button to export the data to JSON. There should be two modes:
 Unfiltered export
@@ -27,50 +24,64 @@ Place pagination logic, filtering logic, and UI-related code in the appropriate 
 <!--Also can you help me to update the method of ecport filtering not checkboxes but click on the attributes, and select them?-->
 
 <!-- Font Awesome for icons -->
+
+
+
+<!-- Font Awesome for icons -->
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
 
 <style>
     body {
         background-color: #f5c9c9;
     }
+
     .container {
         background-color: #ffffff;
         padding: 20px;
         border-radius: 10px;
     }
+
     .form-control {
         background-color: #fff3f3;
         border-color: #f08080;
         color: #333;
     }
+
     .form-control:focus {
         background-color: #ffcccc;
         border-color: #ff4d4d;
         box-shadow: 0 0 5px rgba(255, 77, 77, 0.5);
     }
+
     .btn-primary {
         background-color: #ff4d4d;
         border-color: #e03e3e;
     }
+
     .btn-primary:hover {
         background-color: #e03e3e;
         border-color: #c53737;
     }
+
     .btn-secondary {
         background-color: #f5a3a3;
         border-color: #e08282;
     }
+
     .btn-secondary:hover {
         background-color: #e08282;
         border-color: #d37373;
     }
+
     .text-danger {
         color: #e03e3e;
     }
+
     th[onclick] {
         cursor: pointer;
         transition: background-color 0.2s ease-in-out;
     }
+
     th[onclick]:hover {
         background-color: #ffecec;
         text-decoration: underline;
@@ -79,7 +90,6 @@ Place pagination logic, filtering logic, and UI-related code in the appropriate 
 
 <div class="container mt-5 mb-5">
     <div class="row justify-content-center gap-4">
-
         <!-- Left Column: Form -->
         <div class="col-md-5 border rounded shadow-sm p-4 bg-white">
             <h4 class="text-center mb-4">@(isEditing ? "Edit Class" : "Add Class")</h4>
@@ -140,10 +150,16 @@ Place pagination logic, filtering logic, and UI-related code in the appropriate 
                 </div>
             </form>
 
-            <!-- Export Form -->
-            <form method="post" asp-page-handler="ExportAll" id="exportForm">
-                <input type="hidden" name="SelectedColumns" id="selectedColumnsInput" />
-                <button type="submit" class="btn btn-success mb-3">Export All</button>
+            <!-- Export Buttons -->
+            <form method="post" asp-page-handler="ExportAll" id="exportAllForm">
+                <input type="hidden" name="SelectedColumns" id="selectedColumnsInputAll" />
+                <button type="submit" class="btn btn-success mb-2 me-2">Export All (JSON)</button>
+            </form>
+
+            <form method="post" asp-page-handler="ExportFiltered" id="exportFilteredForm">
+                <input type="hidden" name="SelectedColumns" id="selectedColumnsInputFiltered" />
+                <input type="hidden" name="FilterClassName" value="@Model.FilterClassName" />
+                <button type="submit" class="btn btn-secondary mb-3">Export Filtered (JSON)</button>
             </form>
 
             <!-- Table -->
@@ -192,30 +208,21 @@ Place pagination logic, filtering logic, and UI-related code in the appropriate 
                     @if (Model.PageNumber > 1)
                     {
                         <li class="page-item">
-                            <a class="page-link" 
-                               href="?PageNumber=@(Model.PageNumber - 1)&FilterClassName=@Model.FilterClassName">
-                                Previous
-                            </a>
+                            <a class="page-link" href="?PageNumber=@(Model.PageNumber - 1)&FilterClassName=@Model.FilterClassName">Previous</a>
                         </li>
                     }
 
                     @for (int i = 1; i <= Model.TotalPages; i++)
                     {
                         <li class="page-item @(Model.PageNumber == i ? "active" : "")">
-                            <a class="page-link" 
-                               href="?PageNumber=@i&FilterClassName=@Model.FilterClassName">
-                                @i
-                            </a>
+                            <a class="page-link" href="?PageNumber=@i&FilterClassName=@Model.FilterClassName">@i</a>
                         </li>
                     }
 
                     @if (Model.PageNumber < Model.TotalPages)
                     {
                         <li class="page-item">
-                            <a class="page-link" 
-                               href="?PageNumber=@(Model.PageNumber + 1)&FilterClassName=@Model.FilterClassName">
-                                Next
-                            </a>
+                            <a class="page-link" href="?PageNumber=@(Model.PageNumber + 1)&FilterClassName=@Model.FilterClassName">Next</a>
                         </li>
                     }
                 </ul>
@@ -231,20 +238,29 @@ Place pagination logic, filtering logic, and UI-related code in the appropriate 
         const selectedCols = new Set();
 
         function toggleColumn(index) {
+            const th = document.querySelectorAll("table thead th")[index];
             if (selectedCols.has(index)) {
                 selectedCols.delete(index);
-                document.querySelectorAll("table thead th")[index].style.backgroundColor = "";
+                th.style.backgroundColor = "";
             } else {
                 selectedCols.add(index);
-                document.querySelectorAll("table thead th")[index].style.backgroundColor = "#d1ffd1";
+                th.style.backgroundColor = "#d1ffd1";
             }
         }
 
-        document.getElementById("exportForm").addEventListener("submit", function (e) {
+        function setSelectedColumns(formId, inputId) {
             const selectedIndexes = Array.from(selectedCols);
             const allIndexes = [0, 1, 2];
             const finalIndexes = selectedIndexes.length === 0 ? allIndexes : selectedIndexes;
-            document.getElementById("selectedColumnsInput").value = finalIndexes.join(",");
+            document.getElementById(inputId).value = finalIndexes.join(",");
+        }
+
+        document.getElementById("exportAllForm").addEventListener("submit", function () {
+            setSelectedColumns("exportAllForm", "selectedColumnsInputAll");
+        });
+
+        document.getElementById("exportFilteredForm").addEventListener("submit", function () {
+            setSelectedColumns("exportFilteredForm", "selectedColumnsInputFiltered");
         });
     </script>
 }
