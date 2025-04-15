@@ -1,8 +1,12 @@
 var builder = WebApplication.CreateBuilder(args);
-builder.Services.AddRazorPages();
 
-// 🔽 Session servisini ekle
-builder.Services.AddSession();
+builder.Services.AddRazorPages();
+builder.Services.AddSession(options =>
+{
+    options.IdleTimeout = TimeSpan.FromMinutes(30);
+    options.Cookie.HttpOnly = true;
+    options.Cookie.IsEssential = true;
+});
 
 var app = builder.Build();
 
@@ -14,13 +18,8 @@ if (!app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 app.UseStaticFiles();
-
 app.UseRouting();
-
-// 🔽 Session'ı kullan
 app.UseSession();
-
 app.UseAuthorization();
 app.MapRazorPages();
-
 app.Run();

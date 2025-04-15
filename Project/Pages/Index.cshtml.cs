@@ -1,14 +1,12 @@
-//GPT: Add a filtered export choice, also it should add the JSON, into the exports folder.
-
-
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
-using Week2.Models;
-using Week2.Helpers;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.IO;
+using System;
+using Week2.Models;
+using Week2.Helpers;
+using System.Text;
 
 namespace Week2.Pages
 {
@@ -47,6 +45,28 @@ namespace Week2.Pages
 
         public void OnGet()
         {
+            var sessionUsername = HttpContext.Session.GetString("username");
+            var sessionToken = HttpContext.Session.GetString("token");
+            var sessionId = HttpContext.Session.GetString("session_id");
+
+            var cookieUsername = Request.Cookies["username"];
+            var cookieToken = Request.Cookies["token"];
+            var cookieSessionId = Request.Cookies["session_id"];
+
+            bool loginValid =
+                !string.IsNullOrEmpty(sessionUsername) &&
+                !string.IsNullOrEmpty(sessionToken) &&
+                !string.IsNullOrEmpty(sessionId) &&
+                sessionUsername == cookieUsername &&
+                sessionToken == cookieToken &&
+                sessionId == cookieSessionId;
+
+            if (!loginValid)
+            {
+                Response.Redirect("/Login");
+                return;
+            }
+
             var query = ClassList.AsQueryable();
 
             if (!string.IsNullOrWhiteSpace(FilterClassName))
@@ -54,7 +74,7 @@ namespace Week2.Pages
                 query = query.Where(c => c.ClassName.ToLower().Contains(FilterClassName.ToLower()));
             }
 
-            TotalPages = (int)System.Math.Ceiling(query.Count() / (double)PageSize);
+            TotalPages = (int)Math.Ceiling(query.Count() / (double)PageSize);
             var paged = query.Skip((PageNumber - 1) * PageSize).Take(PageSize).ToList();
 
             FilteredList = paged.Select(c => new ClassInformationTable
@@ -80,6 +100,15 @@ namespace Week2.Pages
             }
         }
 
+        public IActionResult OnPostLogout()
+        {
+            HttpContext.Session.Clear();
+            Response.Cookies.Delete("username");
+            Response.Cookies.Delete("token");
+            Response.Cookies.Delete("session_id");
+            return RedirectToPage("/Login");
+        }
+
         public IActionResult OnPostAdd()
         {
             ModelState.Remove(nameof(FilterClassName));
@@ -96,7 +125,9 @@ namespace Week2.Pages
         {
             var item = ClassList.FirstOrDefault(c => c.Id == id);
             if (item != null)
+            {
                 ClassList.Remove(item);
+            }
 
             return RedirectToPage(new { FilterClassName, PageNumber });
         }
@@ -121,7 +152,6 @@ namespace Week2.Pages
         {
             var selectedIndexes = SelectedColumns?.Split(',').Select(int.Parse).ToList() ?? new List<int> { 0, 1, 2 };
             var columnNames = new[] { "ClassName", "StudentCount", "Description" };
-
             var selectedProperties = selectedIndexes.Select(i => columnNames[i]).ToList();
 
             var exportData = ClassList.Select(c => new ClassInformationTable
@@ -133,10 +163,8 @@ namespace Week2.Pages
             }).ToList();
 
             var json = Utils.Instance.ExportToJson(exportData, selectedProperties);
-
             var fileName = $"ExportedAll_{DateTime.Now:yyyyMMdd_HHmmss}.json";
             var filePath = Path.Combine("wwwroot", "exports", fileName);
-
             Directory.CreateDirectory(Path.GetDirectoryName(filePath)!);
             System.IO.File.WriteAllText(filePath, json);
 
@@ -150,9 +178,10 @@ namespace Week2.Pages
             var selectedProperties = selectedIndexes.Select(i => columnNames[i]).ToList();
 
             var query = ClassList.AsQueryable();
-
             if (!string.IsNullOrWhiteSpace(FilterClassName))
+            {
                 query = query.Where(c => c.ClassName.ToLower().Contains(FilterClassName.ToLower()));
+            }
 
             var filteredData = query.Select(c => new ClassInformationTable
             {
@@ -163,10 +192,8 @@ namespace Week2.Pages
             }).ToList();
 
             var json = Utils.Instance.ExportToJson(filteredData, selectedProperties);
-
             var fileName = $"ExportedFiltered_{DateTime.Now:yyyyMMdd_HHmmss}.json";
             var filePath = Path.Combine("wwwroot", "exports", fileName);
-
             Directory.CreateDirectory(Path.GetDirectoryName(filePath)!);
             System.IO.File.WriteAllText(filePath, json);
 

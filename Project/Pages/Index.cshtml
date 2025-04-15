@@ -4,30 +4,10 @@
 @{
     var isEditing = Model.EditId.HasValue;
 }
-<!-- ChatGPT, you have my provided code from last week, can you please help me to export the data to jason according to the rules:
-Add a new button to export the data to JSON. There should be two modes:
-Unfiltered export
-Filtered export
-The exported JSON should contain only the selected column data.
-Utility Class for JSON Export
-Create a new C# class file named Utils.cs.
-Inside it, implement a generic method that can export any class to JSON.
-The method should work with any model class.
-This class must be implemented as a singleton, so it can be accessed from anywhere in the
-project.
-Folder Structure Reminder (MVP)
-Since your project follows the MVP structure in a Razor Pages application:
-Place the ClassInformationTable and related data models in the Models folder.
-Place the Utils.cs class in a separate folder called Helpers or Utilities.
-Place pagination logic, filtering logic, and UI-related code in the appropriate Pages folder.-->
 
-<!--Also can you help me to update the method of ecport filtering not checkboxes but click on the attributes, and select them?-->
+<!-- GPT: Create a button in my index.cshtml-->
 
-<!-- Font Awesome for icons -->
-
-
-
-<!-- Font Awesome for icons -->
+<!-- Font Awesome (ikonlar) -->
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
 
 <style>
@@ -89,6 +69,14 @@ Place pagination logic, filtering logic, and UI-related code in the appropriate 
 </style>
 
 <div class="container mt-5 mb-5">
+    <div class="d-flex justify-content-end">
+        <form method="post" asp-page-handler="Logout">
+            <button type="submit" class="btn btn-outline-danger mb-3">
+                <i class="fas fa-sign-out-alt me-1"></i> Logout
+            </button>
+        </form>
+    </div>
+
     <div class="row justify-content-center gap-4">
         <!-- Left Column: Form -->
         <div class="col-md-5 border rounded shadow-sm p-4 bg-white">
@@ -153,13 +141,17 @@ Place pagination logic, filtering logic, and UI-related code in the appropriate 
             <!-- Export Buttons -->
             <form method="post" asp-page-handler="ExportAll" id="exportAllForm">
                 <input type="hidden" name="SelectedColumns" id="selectedColumnsInputAll" />
-                <button type="submit" class="btn btn-success mb-2 me-2">Export All (JSON)</button>
+                <button type="submit" class="btn btn-success mb-2 me-2">
+                    Export All (JSON)
+                </button>
             </form>
 
             <form method="post" asp-page-handler="ExportFiltered" id="exportFilteredForm">
                 <input type="hidden" name="SelectedColumns" id="selectedColumnsInputFiltered" />
                 <input type="hidden" name="FilterClassName" value="@Model.FilterClassName" />
-                <button type="submit" class="btn btn-secondary mb-3">Export Filtered (JSON)</button>
+                <button type="submit" class="btn btn-secondary mb-3">
+                    Export Filtered (JSON)
+                </button>
             </form>
 
             <!-- Table -->
@@ -208,21 +200,27 @@ Place pagination logic, filtering logic, and UI-related code in the appropriate 
                     @if (Model.PageNumber > 1)
                     {
                         <li class="page-item">
-                            <a class="page-link" href="?PageNumber=@(Model.PageNumber - 1)&FilterClassName=@Model.FilterClassName">Previous</a>
+                            <a class="page-link" href="?PageNumber=@(Model.PageNumber - 1)&FilterClassName=@Model.FilterClassName">
+                                Previous
+                            </a>
                         </li>
                     }
 
                     @for (int i = 1; i <= Model.TotalPages; i++)
                     {
                         <li class="page-item @(Model.PageNumber == i ? "active" : "")">
-                            <a class="page-link" href="?PageNumber=@i&FilterClassName=@Model.FilterClassName">@i</a>
+                            <a class="page-link" href="?PageNumber=@i&FilterClassName=@Model.FilterClassName">
+                                @i
+                            </a>
                         </li>
                     }
 
                     @if (Model.PageNumber < Model.TotalPages)
                     {
                         <li class="page-item">
-                            <a class="page-link" href="?PageNumber=@(Model.PageNumber + 1)&FilterClassName=@Model.FilterClassName">Next</a>
+                            <a class="page-link" href="?PageNumber=@(Model.PageNumber + 1)&FilterClassName=@Model.FilterClassName">
+                                Next
+                            </a>
                         </li>
                     }
                 </ul>
@@ -248,19 +246,21 @@ Place pagination logic, filtering logic, and UI-related code in the appropriate 
             }
         }
 
-        function setSelectedColumns(formId, inputId) {
-            const selectedIndexes = Array.from(selectedCols);
+        function setSelectedColumns(inputId) {
             const allIndexes = [0, 1, 2];
-            const finalIndexes = selectedIndexes.length === 0 ? allIndexes : selectedIndexes;
+            const finalIndexes = selectedCols.size === 0 
+                ? allIndexes 
+                : Array.from(selectedCols);
+
             document.getElementById(inputId).value = finalIndexes.join(",");
         }
 
         document.getElementById("exportAllForm").addEventListener("submit", function () {
-            setSelectedColumns("exportAllForm", "selectedColumnsInputAll");
+            setSelectedColumns("selectedColumnsInputAll");
         });
 
         document.getElementById("exportFilteredForm").addEventListener("submit", function () {
-            setSelectedColumns("exportFilteredForm", "selectedColumnsInputFiltered");
+            setSelectedColumns("selectedColumnsInputFiltered");
         });
     </script>
 }

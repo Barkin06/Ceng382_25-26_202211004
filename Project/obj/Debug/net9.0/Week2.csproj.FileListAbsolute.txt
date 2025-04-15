@@ -116,6 +116,7 @@ C:\Users\akkay\OneDrive\Masaüstü\Week5\Ceng382_25-26_202211004\Project\obj\Deb
 C:\Users\akkay\OneDrive\Masaüstü\Week5\Ceng382_25-26_202211004\Project\obj\Debug\net9.0\scopedcss\bundle\Week2.styles.css
 C:\Users\akkay\OneDrive\Masaüstü\Week5\Ceng382_25-26_202211004\Project\obj\Debug\net9.0\scopedcss\projectbundle\Week2.bundle.scp.css
 C:\Users\akkay\OneDrive\Masaüstü\Week5\Ceng382_25-26_202211004\Project\obj\Debug\net9.0\compressed\qka2vu9ic9-b9sayid5wm.gz
+C:\Users\akkay\OneDrive\Masaüstü\Week5\Ceng382_25-26_202211004\Project\obj\Debug\net9.0\compressed\3k7ga8zldx-4fzr9da63q.gz
 C:\Users\akkay\OneDrive\Masaüstü\Week5\Ceng382_25-26_202211004\Project\obj\Debug\net9.0\compressed\7lnx59dtj9-61n19gt1b8.gz
 C:\Users\akkay\OneDrive\Masaüstü\Week5\Ceng382_25-26_202211004\Project\obj\Debug\net9.0\compressed\c466cf5jx6-xtxxf3hu2r.gz
 C:\Users\akkay\OneDrive\Masaüstü\Week5\Ceng382_25-26_202211004\Project\obj\Debug\net9.0\compressed\p67wgtmxtc-bqjiyaj88i.gz
