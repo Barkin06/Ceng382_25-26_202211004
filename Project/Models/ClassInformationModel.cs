@@ -15,7 +15,7 @@ namespace Week2.Models
         [Required(ErrorMessage = "Class Name is required.")]
         public string ClassName { get; set; }
 
-        [Range(1, 1000, ErrorMessage = "Student Count must be positive.")]
+        [Range(1, 100000000000, ErrorMessage = "Student Count must be positive.")]
         public int StudentCount { get; set; }
 
         public string Description { get; set; }

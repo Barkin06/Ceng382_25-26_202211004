@@ -151,6 +151,8 @@ namespace Week2.Pages
 
         public async Task<IActionResult> OnPostEditAsync()
         {
+            ModelState.Remove(nameof(FilterClassName));
+
             if (!EditId.HasValue)
                 return RedirectToPage(new { FilterClassName, PageNumber });
 
@@ -165,6 +167,7 @@ namespace Week2.Pages
             }
 
             Response.StatusCode = 200;
+            
 
             return RedirectToPage(new { FilterClassName, PageNumber });
         }
@@ -178,13 +181,16 @@ namespace Week2.Pages
             return RedirectToPage("/Login");
         }
 
-        public async Task<IActionResult> OnPostExportAllAsync(string SelectedColumns)
-        {
+        public async Task<IActionResult> OnPostExportAllAsync(string SelectedColumns){
             var selectedIndexes = SelectedColumns?.Split(',').Select(int.Parse).ToList() ?? new List<int> { 0, 1, 2 };
-            var columnNames = new[] { "Name", "PersonCount", "Description" };
+
+            // 🔥 Doğru isimler ClassInformationTable'a göre
+            var columnNames = new[] { "ClassName", "StudentCount", "Description" };
             var selectedProperties = selectedIndexes.Select(i => columnNames[i]).ToList();
 
-            var exportData = await _context.Classes.ToListAsync();
+            var exportData = await _context.Classes
+                .Where(c => c.IsActive)
+                .ToListAsync();
 
             var filteredData = exportData.Select(c => new ClassInformationTable
             {
@@ -203,14 +209,15 @@ namespace Week2.Pages
             return Redirect($"/exports/{fileName}");
         }
 
-        public async Task<IActionResult> OnPostExportFilteredAsync(string SelectedColumns, string FilterClassName)
-        {
+        public async Task<IActionResult> OnPostExportFilteredAsync(string SelectedColumns, string FilterClassName){
             var selectedIndexes = SelectedColumns?.Split(',').Select(int.Parse).ToList() ?? new List<int> { 0, 1, 2 };
-            var columnNames = new[] { "Name", "PersonCount", "Description" };
+
+            // 🔥 Aynı şekilde doğru isimler
+            var columnNames = new[] { "ClassName", "StudentCount", "Description" };
             var selectedProperties = selectedIndexes.Select(i => columnNames[i]).ToList();
 
             var query = _context.Classes
-                .Where(c => c.IsActive) // SADECE aktif olanlar gelsin
+                .Where(c => c.IsActive)
                 .AsQueryable();
 
             if (!string.IsNullOrWhiteSpace(FilterClassName))

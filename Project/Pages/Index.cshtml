@@ -191,12 +191,15 @@
             document.getElementById(inputId).value = finalIndexes.join(",");
         }
 
-        document.getElementById("exportAllForm").addEventListener("submit", function () {
-            setSelectedColumns("selectedColumnsInputAll");
-        });
+        // 🔐 DOM yüklendikten sonra güvenli event binding
+        document.addEventListener("DOMContentLoaded", function () {
+            document.getElementById("exportAllForm").addEventListener("submit", function () {
+                setSelectedColumns("selectedColumnsInputAll");
+            });
 
-        document.getElementById("exportFilteredForm").addEventListener("submit", function () {
-            setSelectedColumns("selectedColumnsInputFiltered");
+            document.getElementById("exportFilteredForm").addEventListener("submit", function () {
+                setSelectedColumns("selectedColumnsInputFiltered");
+            });
         });
     </script>
 }
