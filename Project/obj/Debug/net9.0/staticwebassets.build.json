@@ -1,6 +1,6 @@
 {
   "Version": 1,
-  "Hash": "mRYezi1dkxjEACqNyMfH3zc/FUxbHr8IAQ+gCxlsklo=",
+  "Hash": "JBkWb33/JP1KT2xcbWCZcTSE8SvBtJjCv/sp2WaxAsg=",
   "Source": "Week2",
   "BasePath": "_content/Week2",
   "Mode": "Default",
@@ -330,6 +330,27 @@
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
       "OriginalItemSpec": "C:\\Users\\akkay\\OneDrive\\Masaüstü\\Week5\\Ceng382_25-26_202211004\\Project\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap-reboot.min.css.map"
+    },
+    {
+      "Identity": "C:\\Users\\akkay\\OneDrive\\Masaüstü\\Week5\\Ceng382_25-26_202211004\\Project\\obj\\Debug\\net9.0\\compressed\\8wn8rtlzww-b9g4ogp5tr.gz",
+      "SourceId": "Week2",
+      "SourceType": "Discovered",
+      "ContentRoot": "C:\\Users\\akkay\\OneDrive\\Masaüstü\\Week5\\Ceng382_25-26_202211004\\Project\\obj\\Debug\\net9.0\\compressed\\",
+      "BasePath": "_content/Week2",
+      "RelativePath": "exports/ExportedAll_20250429_122914#[.{fingerprint=b9g4ogp5tr}]?.json.gz",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Alternative",
+      "AssetMergeBehavior": "",
+      "AssetMergeSource": "",
+      "RelatedAsset": "C:\\Users\\akkay\\OneDrive\\Masaüstü\\Week5\\Ceng382_25-26_202211004\\Project\\wwwroot\\exports\\ExportedAll_20250429_122914.json",
+      "AssetTraitName": "Content-Encoding",
+      "AssetTraitValue": "gzip",
+      "Fingerprint": "43k0tfom80",
+      "Integrity": "UMFdkh3yhJLi2b8tpdHNXHjuQWvc9HgHTbY9dtI4HLo=",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "C:\\Users\\akkay\\OneDrive\\Masaüstü\\Week5\\Ceng382_25-26_202211004\\Project\\wwwroot\\exports\\ExportedAll_20250429_122914.json"
     },
     {
       "Identity": "C:\\Users\\akkay\\OneDrive\\Masaüstü\\Week5\\Ceng382_25-26_202211004\\Project\\obj\\Debug\\net9.0\\compressed\\9rokzr3431-o1o13a6vjx.gz",
@@ -1464,6 +1485,27 @@
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
       "OriginalItemSpec": "wwwroot\\data\\users.json"
+    },
+    {
+      "Identity": "C:\\Users\\akkay\\OneDrive\\Masaüstü\\Week5\\Ceng382_25-26_202211004\\Project\\wwwroot\\exports\\ExportedAll_20250429_122914.json",
+      "SourceId": "Week2",
+      "SourceType": "Discovered",
+      "ContentRoot": "C:\\Users\\akkay\\OneDrive\\Masaüstü\\Week5\\Ceng382_25-26_202211004\\Project\\wwwroot\\",
+      "BasePath": "_content/Week2",
+      "RelativePath": "exports/ExportedAll_20250429_122914#[.{fingerprint}]?.json",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "AssetMergeBehavior": "",
+      "AssetMergeSource": "",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "Fingerprint": "b9g4ogp5tr",
+      "Integrity": "T1PNoYwrqgwDVLtfmj7L5e0Sq02OEbqHPC8RFhICuUU=",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot\\exports\\ExportedAll_20250429_122914.json"
     },
     {
       "Identity": "C:\\Users\\akkay\\OneDrive\\Masaüstü\\Week5\\Ceng382_25-26_202211004\\Project\\wwwroot\\favicon.ico",
@@ -3362,6 +3404,304 @@
         {
           "Name": "integrity",
           "Value": "sha256-Mi9nhVm074Q6YNO9dGGZaivXja0VZXkeUY3BQIK0+Go="
+        }
+      ]
+    },
+    {
+      "Route": "exports/ExportedAll_20250429_122914.b9g4ogp5tr.json",
+      "AssetFile": "C:\\Users\\akkay\\OneDrive\\Masaüstü\\Week5\\Ceng382_25-26_202211004\\Project\\obj\\Debug\\net9.0\\compressed\\8wn8rtlzww-b9g4ogp5tr.gz",
+      "Selectors": [
+        {
+          "Name": "Content-Encoding",
+          "Value": "gzip",
+          "Quality": "0.043478260870"
+        }
+      ],
+      "ResponseHeaders": [
+        {
+          "Name": "Accept-Ranges",
+          "Value": "bytes"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "22"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"UMFdkh3yhJLi2b8tpdHNXHjuQWvc9HgHTbY9dtI4HLo=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Tue, 29 Apr 2025 09:29:14 GMT"
+        },
+        {
+          "Name": "Cache-Control",
+          "Value": "max-age=31536000, immutable"
+        },
+        {
+          "Name": "Content-Encoding",
+          "Value": "gzip"
+        },
+        {
+          "Name": "Vary",
+          "Value": "Content-Encoding"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "application/json"
+        },
+        {
+          "Name": "ETag",
+          "Value": "W/\"T1PNoYwrqgwDVLtfmj7L5e0Sq02OEbqHPC8RFhICuUU=\""
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "fingerprint",
+          "Value": "b9g4ogp5tr"
+        },
+        {
+          "Name": "label",
+          "Value": "exports/ExportedAll_20250429_122914.json"
+        },
+        {
+          "Name": "integrity",
+          "Value": "sha256-T1PNoYwrqgwDVLtfmj7L5e0Sq02OEbqHPC8RFhICuUU="
+        }
+      ]
+    },
+    {
+      "Route": "exports/ExportedAll_20250429_122914.b9g4ogp5tr.json",
+      "AssetFile": "C:\\Users\\akkay\\OneDrive\\Masaüstü\\Week5\\Ceng382_25-26_202211004\\Project\\wwwroot\\exports\\ExportedAll_20250429_122914.json",
+      "Selectors": [],
+      "ResponseHeaders": [
+        {
+          "Name": "Accept-Ranges",
+          "Value": "bytes"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "2"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "application/json"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"T1PNoYwrqgwDVLtfmj7L5e0Sq02OEbqHPC8RFhICuUU=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Tue, 29 Apr 2025 09:29:14 GMT"
+        },
+        {
+          "Name": "Cache-Control",
+          "Value": "max-age=31536000, immutable"
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "fingerprint",
+          "Value": "b9g4ogp5tr"
+        },
+        {
+          "Name": "label",
+          "Value": "exports/ExportedAll_20250429_122914.json"
+        },
+        {
+          "Name": "integrity",
+          "Value": "sha256-T1PNoYwrqgwDVLtfmj7L5e0Sq02OEbqHPC8RFhICuUU="
+        }
+      ]
+    },
+    {
+      "Route": "exports/ExportedAll_20250429_122914.b9g4ogp5tr.json.gz",
+      "AssetFile": "C:\\Users\\akkay\\OneDrive\\Masaüstü\\Week5\\Ceng382_25-26_202211004\\Project\\obj\\Debug\\net9.0\\compressed\\8wn8rtlzww-b9g4ogp5tr.gz",
+      "Selectors": [],
+      "ResponseHeaders": [
+        {
+          "Name": "Accept-Ranges",
+          "Value": "bytes"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "22"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "application/json"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"UMFdkh3yhJLi2b8tpdHNXHjuQWvc9HgHTbY9dtI4HLo=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Tue, 29 Apr 2025 09:29:14 GMT"
+        },
+        {
+          "Name": "Cache-Control",
+          "Value": "max-age=31536000, immutable"
+        },
+        {
+          "Name": "Content-Encoding",
+          "Value": "gzip"
+        },
+        {
+          "Name": "Vary",
+          "Value": "Content-Encoding"
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "fingerprint",
+          "Value": "b9g4ogp5tr"
+        },
+        {
+          "Name": "label",
+          "Value": "exports/ExportedAll_20250429_122914.json.gz"
+        },
+        {
+          "Name": "integrity",
+          "Value": "sha256-UMFdkh3yhJLi2b8tpdHNXHjuQWvc9HgHTbY9dtI4HLo="
+        }
+      ]
+    },
+    {
+      "Route": "exports/ExportedAll_20250429_122914.json",
+      "AssetFile": "C:\\Users\\akkay\\OneDrive\\Masaüstü\\Week5\\Ceng382_25-26_202211004\\Project\\obj\\Debug\\net9.0\\compressed\\8wn8rtlzww-b9g4ogp5tr.gz",
+      "Selectors": [
+        {
+          "Name": "Content-Encoding",
+          "Value": "gzip",
+          "Quality": "0.043478260870"
+        }
+      ],
+      "ResponseHeaders": [
+        {
+          "Name": "Accept-Ranges",
+          "Value": "bytes"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "22"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"UMFdkh3yhJLi2b8tpdHNXHjuQWvc9HgHTbY9dtI4HLo=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Tue, 29 Apr 2025 09:29:14 GMT"
+        },
+        {
+          "Name": "Cache-Control",
+          "Value": "no-cache"
+        },
+        {
+          "Name": "Content-Encoding",
+          "Value": "gzip"
+        },
+        {
+          "Name": "Vary",
+          "Value": "Content-Encoding"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "application/json"
+        },
+        {
+          "Name": "ETag",
+          "Value": "W/\"T1PNoYwrqgwDVLtfmj7L5e0Sq02OEbqHPC8RFhICuUU=\""
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "integrity",
+          "Value": "sha256-T1PNoYwrqgwDVLtfmj7L5e0Sq02OEbqHPC8RFhICuUU="
+        }
+      ]
+    },
+    {
+      "Route": "exports/ExportedAll_20250429_122914.json",
+      "AssetFile": "C:\\Users\\akkay\\OneDrive\\Masaüstü\\Week5\\Ceng382_25-26_202211004\\Project\\wwwroot\\exports\\ExportedAll_20250429_122914.json",
+      "Selectors": [],
+      "ResponseHeaders": [
+        {
+          "Name": "Accept-Ranges",
+          "Value": "bytes"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "2"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "application/json"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"T1PNoYwrqgwDVLtfmj7L5e0Sq02OEbqHPC8RFhICuUU=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Tue, 29 Apr 2025 09:29:14 GMT"
+        },
+        {
+          "Name": "Cache-Control",
+          "Value": "no-cache"
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "integrity",
+          "Value": "sha256-T1PNoYwrqgwDVLtfmj7L5e0Sq02OEbqHPC8RFhICuUU="
+        }
+      ]
+    },
+    {
+      "Route": "exports/ExportedAll_20250429_122914.json.gz",
+      "AssetFile": "C:\\Users\\akkay\\OneDrive\\Masaüstü\\Week5\\Ceng382_25-26_202211004\\Project\\obj\\Debug\\net9.0\\compressed\\8wn8rtlzww-b9g4ogp5tr.gz",
+      "Selectors": [],
+      "ResponseHeaders": [
+        {
+          "Name": "Accept-Ranges",
+          "Value": "bytes"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "22"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "application/json"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"UMFdkh3yhJLi2b8tpdHNXHjuQWvc9HgHTbY9dtI4HLo=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Tue, 29 Apr 2025 09:29:14 GMT"
+        },
+        {
+          "Name": "Cache-Control",
+          "Value": "no-cache"
+        },
+        {
+          "Name": "Content-Encoding",
+          "Value": "gzip"
+        },
+        {
+          "Name": "Vary",
+          "Value": "Content-Encoding"
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "integrity",
+          "Value": "sha256-UMFdkh3yhJLi2b8tpdHNXHjuQWvc9HgHTbY9dtI4HLo="
         }
       ]
     },

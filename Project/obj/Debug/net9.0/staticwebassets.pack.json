@@ -13,6 +13,10 @@
       "PackagePath": "staticwebassets\\data\\users.json"
     },
     {
+      "Id": "C:\\Users\\akkay\\OneDrive\\Masaüstü\\Week5\\Ceng382_25-26_202211004\\Project\\wwwroot\\exports\\ExportedAll_20250429_122914.json",
+      "PackagePath": "staticwebassets\\exports\\ExportedAll_20250429_122914.json"
+    },
+    {
       "Id": "C:\\Users\\akkay\\OneDrive\\Masaüstü\\Week5\\Ceng382_25-26_202211004\\Project\\wwwroot\\favicon.ico",
       "PackagePath": "staticwebassets\\favicon.ico"
     },
