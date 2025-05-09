@@ -2,23 +2,22 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
 using Week2.Models;
-using Week2.Data;  // <-- DbContext dosyanın namespace'i
+using Week2.Data;
 using Week2.Helpers;
 
 
-//gpt: GPT, I sent you a task document that declares my work to do, can you help me?
+using Microsoft.AspNetCore.Authorization;
 
-//gpt: It is going well, now I need you to help me with the SMSS and SQL server conf. manager, how can I create an SQL and link it
 
-//gpt: database link process giving me the error message on screenshot, what should I do?
+namespace Week2.Pages.Classes
+{
+    [Authorize]
+    public class IndexModel : PageModel
+    {
+        // ...
+    }
+}
 
-//gpt: program.cs and appsettings.json update
-
-//gpt: I need a soft delete process, delete should make active tag 0, and delete from screen
-
-//gpt: class and utills namespaces are not seen by program, help me find out the reason.
-
-//gpt: finally, I need to use http respone status codes, and check out them in Inspect menu.
 
 namespace Week2.Pages
 {
@@ -52,7 +51,6 @@ namespace Week2.Pages
 
         public async Task<IActionResult> OnGetAsync()
         {
-            // Session ve cookie kontrolü
             var sessionUsername = HttpContext.Session.GetString("username");
             var sessionToken = HttpContext.Session.GetString("token");
             var sessionId = HttpContext.Session.GetString("session_id");
@@ -71,18 +69,17 @@ namespace Week2.Pages
 
             if (!loginValid)
             {
-                return RedirectToPage("/Login");
+                return RedirectToPage("/Account/Login", new { area = "Identity" });
+
             }
 
-            // Verileri veritabanından çek
             var query = _context.Classes
-                .Where(c => c.IsActive) // ❗ sadece aktif kayıtlar gelsin
+                .Where(c => c.IsActive)
                 .AsQueryable();
-
 
             if (!string.IsNullOrWhiteSpace(FilterClassName))
             {
-                query = query.Where(c => c.Name.ToLower().Contains(FilterClassName.ToLower()));
+                query = query.Where(c => c.ClassName.ToLower().Contains(FilterClassName.ToLower()));
             }
 
             TotalPages = (int)Math.Ceiling(await query.CountAsync() / (double)PageSize);
@@ -90,10 +87,10 @@ namespace Week2.Pages
 
             FilteredList = paged.Select(c => new ClassInformationTable
             {
-                ClassName = c.Name,
+                ClassName = c.ClassName,
                 StudentCount = c.PersonCount,
                 Description = c.Description,
-                HiddenId = c.Id
+                HiddenId = c.ClassId
             }).ToList();
 
             if (EditId.HasValue)
@@ -101,9 +98,9 @@ namespace Week2.Pages
                 var editingClass = await _context.Classes.FindAsync(EditId.Value);
                 if (editingClass != null)
                 {
-                    EditingClass = new ClassInformationModel(editingClass.Id)
+                    EditingClass = new ClassInformationModel(editingClass.ClassId)
                     {
-                        ClassName = editingClass.Name,
+                        ClassName = editingClass.ClassName,
                         StudentCount = editingClass.PersonCount,
                         Description = editingClass.Description
                     };
@@ -123,7 +120,7 @@ namespace Week2.Pages
 
             var newClass = new Class
             {
-                Name = NewClass.ClassName,
+                ClassName = NewClass.ClassName,
                 PersonCount = NewClass.StudentCount,
                 Description = NewClass.Description,
                 IsActive = true
@@ -159,7 +156,7 @@ namespace Week2.Pages
             var item = await _context.Classes.FindAsync(EditId.Value);
             if (item != null && ModelState.IsValid)
             {
-                item.Name = NewClass.ClassName;
+                item.ClassName = NewClass.ClassName;
                 item.PersonCount = NewClass.StudentCount;
                 item.Description = NewClass.Description;
 
@@ -167,8 +164,6 @@ namespace Week2.Pages
             }
 
             Response.StatusCode = 200;
-            
-
             return RedirectToPage(new { FilterClassName, PageNumber });
         }
 
@@ -178,13 +173,14 @@ namespace Week2.Pages
             Response.Cookies.Delete("username");
             Response.Cookies.Delete("token");
             Response.Cookies.Delete("session_id");
-            return RedirectToPage("/Login");
+            return RedirectToPage("/Account/Login", new { area = "Identity" });
+
+
         }
 
-        public async Task<IActionResult> OnPostExportAllAsync(string SelectedColumns){
+        public async Task<IActionResult> OnPostExportAllAsync(string SelectedColumns)
+        {
             var selectedIndexes = SelectedColumns?.Split(',').Select(int.Parse).ToList() ?? new List<int> { 0, 1, 2 };
-
-            // 🔥 Doğru isimler ClassInformationTable'a göre
             var columnNames = new[] { "ClassName", "StudentCount", "Description" };
             var selectedProperties = selectedIndexes.Select(i => columnNames[i]).ToList();
 
@@ -194,10 +190,10 @@ namespace Week2.Pages
 
             var filteredData = exportData.Select(c => new ClassInformationTable
             {
-                ClassName = c.Name,
+                ClassName = c.ClassName,
                 StudentCount = c.PersonCount,
                 Description = c.Description,
-                HiddenId = c.Id
+                HiddenId = c.ClassId
             }).ToList();
 
             var json = Utils.Instance.ExportToJson(filteredData, selectedProperties);
@@ -209,10 +205,9 @@ namespace Week2.Pages
             return Redirect($"/exports/{fileName}");
         }
 
-        public async Task<IActionResult> OnPostExportFilteredAsync(string SelectedColumns, string FilterClassName){
+        public async Task<IActionResult> OnPostExportFilteredAsync(string SelectedColumns, string FilterClassName)
+        {
             var selectedIndexes = SelectedColumns?.Split(',').Select(int.Parse).ToList() ?? new List<int> { 0, 1, 2 };
-
-            // 🔥 Aynı şekilde doğru isimler
             var columnNames = new[] { "ClassName", "StudentCount", "Description" };
             var selectedProperties = selectedIndexes.Select(i => columnNames[i]).ToList();
 
@@ -222,17 +217,17 @@ namespace Week2.Pages
 
             if (!string.IsNullOrWhiteSpace(FilterClassName))
             {
-                query = query.Where(c => c.Name.ToLower().Contains(FilterClassName.ToLower()));
+                query = query.Where(c => c.ClassName.ToLower().Contains(FilterClassName.ToLower()));
             }
 
             var exportData = await query.ToListAsync();
 
             var filteredData = exportData.Select(c => new ClassInformationTable
             {
-                ClassName = c.Name,
+                ClassName = c.ClassName,
                 StudentCount = c.PersonCount,
                 Description = c.Description,
-                HiddenId = c.Id
+                HiddenId = c.ClassId
             }).ToList();
 
             var json = Utils.Instance.ExportToJson(filteredData, selectedProperties);
@@ -244,7 +239,6 @@ namespace Week2.Pages
             return Redirect($"/exports/{fileName}");
         }
 
-        // İlk seferde JSON'dan veritabanına verileri taşıyacak method
         public async Task<IActionResult> OnPostMigrateJsonToDbAsync()
         {
             var list = GenerateSampleData();
@@ -253,7 +247,7 @@ namespace Week2.Pages
             {
                 var cls = new Class
                 {
-                    Name = item.ClassName,
+                    ClassName = item.ClassName,
                     PersonCount = item.StudentCount,
                     Description = item.Description,
                     IsActive = true
@@ -267,7 +261,6 @@ namespace Week2.Pages
             return RedirectToPage();
         }
 
-        // Sadece ilk veri yükleme için kullanılan method
         private static List<ClassInformationModel> GenerateSampleData()
         {
             var list = new List<ClassInformationModel>();

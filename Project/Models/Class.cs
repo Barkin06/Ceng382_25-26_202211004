@@ -11,8 +11,12 @@ namespace Week2.Models
         public string Name { get; set; }
         [Required]
         public int PersonCount { get; set; }
-        public string? Description { get; set; }
-        [Required]
         public bool IsActive { get; set; }
+
+        public int ClassId { get; set; }  // Primary key
+        public string ClassName { get; set; } = string.Empty;
+        public string Description { get; set; } = string.Empty;
+        public DateTime CreatedDate { get; set; } = DateTime.Now;
+
     }
 }
